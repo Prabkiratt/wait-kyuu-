@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: { default: "Wait? Kyu? Find a shorter wait", template: "%s · Wait? Kyu?" },
   description: "See live waiting times at nearby businesses and join the queue before you arrive.",
 };
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffc21a" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#ffc21a" };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { platformName, announcement, supportEmail } = await getBootstrap();

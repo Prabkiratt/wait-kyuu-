@@ -58,7 +58,7 @@ export default function Dashboard() {
 
       <div className="mt-4 flex gap-1 overflow-x-auto rounded-2xl bg-white p-1 shadow-sm" role="tablist">
         {(["queue", "qr", "analytics", "settings"] as const).map((t) => (
-          <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={`flex-1 rounded-xl px-4 py-2 text-sm font-semibold capitalize ${tab === t ? "bg-brand text-white" : "text-muted"}`}>{t === "qr" ? "QR code" : t}</button>
+          <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={`flex-1 whitespace-nowrap rounded-xl px-2.5 py-2 text-sm font-semibold capitalize sm:px-4 ${tab === t ? "bg-brand text-white" : "text-muted"}`}>{t === "qr" ? "QR" : t}</button>
         ))}
       </div>
       {toast && <p role="alert" className="mt-3 rounded-xl bg-red-50 p-3 text-sm font-medium text-red-700">{toast}</p>}
@@ -90,15 +90,19 @@ export default function Dashboard() {
             ) : (
               <ul className="mt-4 divide-y divide-black/5">
                 {q.tickets.map((t) => (
-                  <li key={t.id} className="flex flex-wrap items-center gap-3 py-3">
-                    <span className="w-14 text-lg font-extrabold tabular-nums">{t.number}</span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-semibold">{t.name}{t.source === "walk-in" && <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold uppercase text-slate-600">walk-in</span>}</p>
-                      {t.phone && <p className="text-xs text-muted">{t.phone}</p>}
+                  <li key={t.id} className="py-3 sm:flex sm:items-center sm:gap-3">
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                      <span className="w-12 shrink-0 text-lg font-extrabold tabular-nums sm:w-14">{t.number}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-semibold">{t.name}{t.source === "walk-in" && <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold uppercase text-slate-600">walk-in</span>}</p>
+                        {t.phone && <a href={`tel:${t.phone.replace(/\s/g, "")}`} className="text-xs text-muted underline-offset-2 hover:underline">{t.phone}</a>}
+                      </div>
+                      <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${t.status === "SERVING" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>{t.status === "SERVING" ? "Serving" : "Waiting"}</span>
                     </div>
-                    <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${t.status === "SERVING" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>{t.status === "SERVING" ? "Serving" : "Waiting"}</span>
-                    <button className="btn btn-ghost !px-3 !py-1.5 !text-sm" onClick={() => act({ action: "skip", ticketId: t.id })}>Skip</button>
-                    <button className="btn btn-danger !px-3 !py-1.5 !text-sm" onClick={() => confirm(`Remove ${t.name}?`) && act({ action: "remove", ticketId: t.id })}>Remove</button>
+                    <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-0 sm:flex">
+                      <button className="btn btn-ghost !px-3 !py-2 !text-sm" onClick={() => act({ action: "skip", ticketId: t.id })}>Skip</button>
+                      <button className="btn btn-danger !px-3 !py-2 !text-sm" onClick={() => confirm(`Remove ${t.name}?`) && act({ action: "remove", ticketId: t.id })}>Remove</button>
+                    </div>
                   </li>
                 ))}
               </ul>

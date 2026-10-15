@@ -59,7 +59,7 @@ export default function MarketBrowser({ initialQ = "", initialCat = "", search =
         <label className="flex flex-1 items-center gap-2 rounded-xl bg-[#f3eee3] px-3">
           <span aria-hidden>🔍</span>
           <input
-            className="w-full bg-transparent py-3 outline-none" placeholder="What are you looking for? Salon, dentist, coffee…"
+            className="w-full bg-transparent py-3 outline-none" placeholder="Search salon, dentist, coffee…"
             value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search businesses, categories or services"
           />
           {q && <button onClick={() => setQ("")} aria-label="Clear search" className="text-muted">✕</button>}
@@ -80,7 +80,7 @@ export default function MarketBrowser({ initialQ = "", initialCat = "", search =
       </div>
       {locError && <p role="alert" className="mt-2 text-sm text-red-600">{locError}</p>}
 
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+      <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <Chip active={!cat} onClick={() => setCat("")}>All</Chip>
         {data?.categories.map((c) => <Chip key={c.slug} active={cat === c.slug} onClick={() => setCat(cat === c.slug ? "" : c.slug)}>{c.name}</Chip>)}
       </div>

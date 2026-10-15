@@ -12,9 +12,9 @@ export default function ShortestWaits() {
   const rows = (data?.results ?? []).filter((b) => b.waitMin !== null && b.status === "OPEN").slice(0, 5);
   return (
     <div className="relative">
-      <div className="card overflow-hidden border-2 border-stone-900 shadow-[6px_6px_0_#1a1a17]">
+      <div className="card overflow-hidden border-2 border-stone-900 shadow-[4px_4px_0_#1a1a17] sm:shadow-[6px_6px_0_#1a1a17]">
         <div className="flex items-center justify-between border-b-2 border-dashed border-stone-900/25 bg-[#ffc21a] px-5 py-3">
-          <h2 className="display text-lg font-extrabold">Shortest waits right now</h2>
+          <h2 className="display text-base font-extrabold sm:text-lg">Shortest waits right now</h2>
           <LiveTag connected={connected} />
         </div>
         <ul className="divide-y divide-black/10">
@@ -23,7 +23,7 @@ export default function ShortestWaits() {
             <li key={b.slug}>
               <Link href={`/business/${b.slug}`} className="group flex items-center gap-4 px-5 py-3 transition hover:bg-[#fffaf0]">
                 <span className="display w-5 text-sm font-bold text-stone-400">{i + 1}</span>
-                <Cover hue={b.hue} icon={b.category.name[0]} imageUrl={b.imageUrl} w={160} className="h-12 w-12 shrink-0 rounded-lg" />
+                <Cover hue={b.hue} icon={b.category.name[0]} imageUrl={b.imageUrl} w={160} eager className="h-12 w-12 shrink-0 rounded-lg" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-bold group-hover:underline">{b.name}</p>
                   <p className="truncate text-xs text-muted">{b.category.name} · {b.area}</p>
@@ -39,7 +39,7 @@ export default function ShortestWaits() {
         </ul>
         <Link href="/search?sort=wait" className="block border-t-2 border-stone-900 bg-stone-900 px-5 py-3 text-center text-sm font-bold text-white hover:bg-black">Compare all waits →</Link>
       </div>
-      <div aria-hidden className="display absolute -bottom-6 -right-5 grid h-24 w-24 rotate-12 place-items-center rounded-full bg-[#d9421c] p-2 text-center text-[13px] font-extrabold leading-tight text-white shadow-md">No app.<br />No signup.</div>
+      <div aria-hidden className="display absolute -bottom-6 right-2 hidden h-24 w-24 rotate-12 sm:-right-5 sm:grid place-items-center rounded-full bg-[#d9421c] p-2 text-center text-[13px] font-extrabold leading-tight text-white shadow-md">No app.<br />No signup.</div>
     </div>
   );
 }

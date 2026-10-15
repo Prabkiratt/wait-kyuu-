@@ -58,13 +58,13 @@ export default function BusinessView({ slug, autoJoin }: { slug: string; autoJoi
               <p className="mt-1 text-muted">{info.category} · {card.area}, {card.city}</p>
               <div className="mt-2"><Stars rating={card.rating} count={card.reviewCount} /></div>
             </div>
-            <button onClick={() => toggle(slug)} aria-pressed={favs.includes(slug)} aria-label="Save to favourites" className="grid h-11 w-11 place-items-center rounded-full border border-black/15 text-xl hover:bg-[#f3eee3]">{favs.includes(slug) ? "❤️" : "🤍"}</button>
+            <button onClick={() => toggle(slug)} aria-pressed={favs.includes(slug)} aria-label="Save to favourites" className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-black/15 text-chili hover:bg-[#f3eee3]"><svg width="20" height="20" viewBox="0 0 24 24" fill={favs.includes(slug) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round" aria-hidden><path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.7 3 5.5 6.3 5.5c2 0 3.7 1.1 4.7 2.7h2c1-1.6 2.7-2.7 4.7-2.7 3.3 0 5.1 3.2 3.8 6.3C19.5 16.4 12 21 12 21Z" /></svg></button>
           </div>
           <p className="mt-3 text-[15px] leading-relaxed text-slate-700">{info.description}</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <a className="btn btn-ghost !py-2 text-sm" href={`tel:${info.phone.replace(/\s/g, "")}`}>📞 Call business</a>
-            <a className="btn btn-ghost !py-2 text-sm" target="_blank" rel="noreferrer" href={`https://www.openstreetmap.org/?mlat=${card.lat}&mlon=${card.lng}#map=17/${card.lat}/${card.lng}`}>🗺 View on map</a>
-            <button className="btn btn-ghost !py-2 text-sm" onClick={share}>{copied ? "✓ Link copied" : "↗ Share"}</button>
+            <a className="btn btn-ghost !py-2 text-sm" href={`tel:${info.phone.replace(/\s/g, "")}`}>Call business</a>
+            <a className="btn btn-ghost !py-2 text-sm" target="_blank" rel="noreferrer" href={`https://www.openstreetmap.org/?mlat=${card.lat}&mlon=${card.lng}#map=17/${card.lat}/${card.lng}`}>View on map</a>
+            <button className="btn btn-ghost !py-2 text-sm" onClick={share}>{copied ? "✓ Link copied" : "Share"}</button>
           </div>
         </div>
 
@@ -92,7 +92,7 @@ export default function BusinessView({ slug, autoJoin }: { slug: string; autoJoi
                       {queues.length > 1 && <p className="font-bold">{q.name}</p>}
                       <p className="text-sm text-muted">{q.status === "paused" ? "Queue paused" : q.status === "full" ? "Queue full" : `${q.waiting} waiting · ~${q.avgServiceMin} min each`}</p>
                     </div>
-                    <div className="flex items-center gap-5 text-center">
+                    <div className="grid w-full grid-cols-3 gap-2 text-center sm:w-auto sm:gap-5">
                       <Stat label="Now serving" value={q.serving ?? "-"} />
                       <Stat label="People waiting" value={String(q.waiting)} />
                       <Stat label="Est. wait" value={q.status === "open" ? `${q.estWaitMin} min` : "-"} />
@@ -161,7 +161,7 @@ export default function BusinessView({ slug, autoJoin }: { slug: string; autoJoi
 }
 
 const Stat = ({ label, value }: { label: string; value: string }) => (
-  <div><div className="text-xl font-extrabold tabular-nums">{value}</div><div className="text-[11px] uppercase tracking-wide text-muted">{label}</div></div>
+  <div className="min-w-0"><div className="whitespace-nowrap text-lg font-extrabold tabular-nums sm:text-xl">{value}</div><div className="text-[10px] uppercase leading-tight tracking-wide text-muted sm:text-[11px]">{label}</div></div>
 );
 
 function JoinSheet({ bizName, queue, onJoin, onClose }: { bizName: string; queue: QueueView; onJoin: (n: string, p: string) => Promise<void>; onClose: () => void }) {
@@ -172,7 +172,7 @@ function JoinSheet({ bizName, queue, onJoin, onClose }: { bizName: string; queue
   return (
     <div className="fixed inset-0 z-40 flex items-end bg-black/40 sm:items-center sm:justify-center" onClick={onClose}>
       <form
-        className="pop card w-full max-w-md rounded-b-none p-5 sm:rounded-b-3xl" onClick={(e) => e.stopPropagation()}
+        className="pop card w-full max-w-md rounded-b-none p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:rounded-b-3xl" onClick={(e) => e.stopPropagation()}
         onSubmit={async (e) => {
           e.preventDefault(); setBusy(true); setErr("");
           try { await onJoin(name, phone); } catch (x) { setErr((x as Error).message); setBusy(false); }
@@ -203,7 +203,7 @@ function Gallery({ images, hue, icon, name }: { images: string[]; hue: number; i
     <>
       <div className="mt-4 grid h-56 gap-2 overflow-hidden rounded-3xl sm:h-80 sm:grid-cols-3 sm:grid-rows-2">
         <button onClick={() => main && setZoom(main)} className={`group relative block text-left ${rest.length ? "sm:col-span-2 sm:row-span-2" : "sm:col-span-3 sm:row-span-2"}`} aria-label={`Open photo of ${name}`}>
-          <Cover hue={hue} icon={icon} imageUrl={main} w={1200} className="h-full w-full" />
+          <Cover hue={hue} icon={icon} imageUrl={main} w={1200} eager className="h-full w-full" />
         </button>
         {rest.slice(0, 2).map((u, i) => (
           <button key={u} onClick={() => setZoom(u)} className="group relative hidden sm:block" aria-label={`Open photo ${i + 2} of ${name}`}>

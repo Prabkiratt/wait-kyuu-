@@ -61,7 +61,7 @@ export default function Overview() {
         <Kpi label="Customers / merchants" value={`${k.customers} / ${k.merchants}`} sub="registered accounts" href="/admin/users" />
       </div>
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <Panel title="Queue activity · 14 days" className="lg:col-span-2" actions={<span className="flex gap-3 text-xs font-semibold"><span className="text-chili">● Joined</span><span className="text-emerald-600">● Served</span></span>}><LineChart data={data.trend} /></Panel>
+        <Panel title="Queue activity · 14 days" className="lg:col-span-2" actions={<span className="flex gap-3 text-xs font-semibold"><span className="text-stone-900">● Joined</span><span className="text-emerald-600">● Served</span></span>}><LineChart data={data.trend} /></Panel>
         <Panel title="Needs attention">
           {data.pending.length === 0 ? <p className="py-6 text-center text-sm text-muted">✅ No businesses awaiting approval.</p> : (
             <ul className="space-y-2">{data.pending.map((p) => (

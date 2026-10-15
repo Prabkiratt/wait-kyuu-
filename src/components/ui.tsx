@@ -73,14 +73,14 @@ export function LiveTag({ connected }: { connected: boolean }) {
 }
 
 /** Real photo with a gradient fallback if the image is missing or fails to load. */
-export function Cover({ hue, icon, imageUrl, className = "", w = 800, children }: { hue: number; icon: string; imageUrl?: string | null; className?: string; w?: number; children?: React.ReactNode }) {
+export function Cover({ hue, icon, imageUrl, className = "", w = 800, eager = false, children }: { hue: number; icon: string; imageUrl?: string | null; className?: string; w?: number; eager?: boolean; children?: React.ReactNode }) {
   const [failed, setFailed] = useState(false);
   const src = photo(imageUrl ?? undefined, w);
   return (
     <div className={`relative overflow-hidden bg-slate-200 ${className}`} style={failed || !src ? { background: `linear-gradient(135deg, hsl(${hue} 70% 55%), hsl(${(hue + 40) % 360} 70% 40%))` } : undefined}>
       {src && !failed ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" loading="lazy" decoding="async" onError={() => setFailed(true)} className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+        <img src={src} alt="" loading={eager ? "eager" : "lazy"} decoding="async" onError={() => setFailed(true)} className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105" />
       ) : (
         <span className="absolute inset-0 grid place-items-center text-5xl">{icon}</span>
       )}

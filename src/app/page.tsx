@@ -20,14 +20,14 @@ export default async function Home() {
 
   return (
     <>
-      <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-14 pt-10 lg:grid-cols-[1.1fr_0.9fr] lg:pb-20 lg:pt-16">
+      <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 pb-14 pt-8 sm:gap-12 sm:pt-10 lg:grid-cols-[1.1fr_0.9fr] lg:pb-20 lg:pt-16">
         <div>
-          <p className="mb-5 text-sm font-semibold uppercase tracking-[0.16em] text-stone-500">Bengaluru · {bizCount} places · {live} live queues</p>
-          <h1 className="display text-[2.9rem] font-extrabold leading-[0.98] sm:text-7xl">Find a <span className="hl">shorter wait.</span></h1>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500 sm:mb-5 sm:text-sm sm:tracking-[0.16em]">Bengaluru · {bizCount} {bizCount === 1 ? "place" : "places"} · {live} live {live === 1 ? "queue" : "queues"}</p>
+          <h1 className="display text-[2.6rem] font-extrabold leading-[1] sm:text-7xl sm:leading-[0.98]">Find a <span className="hl">shorter wait.</span></h1>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-stone-600">See live waiting times at nearby businesses and join the queue before you arrive.</p>
-          <form action="/search" className="mt-8 flex max-w-xl gap-2 rounded-2xl border-2 border-stone-900 bg-white p-1.5 shadow-[4px_4px_0_#1a1a17]">
-            <input name="q" className="min-w-0 flex-1 rounded-xl bg-transparent px-4 py-3 text-lg outline-none placeholder:text-stone-400" placeholder="What are you looking for?" aria-label="Search" />
-            <button className="btn btn-primary !px-6">Search</button>
+          <form action="/search" className="mt-7 flex max-w-xl gap-2 rounded-2xl border-2 border-stone-900 bg-white p-1.5 shadow-[3px_3px_0_#1a1a17] sm:mt-8 sm:shadow-[4px_4px_0_#1a1a17]">
+            <input name="q" className="min-w-0 flex-1 rounded-xl bg-transparent px-3 py-3 text-base outline-none placeholder:text-stone-400 sm:px-4 sm:text-lg" placeholder="What are you looking for?" aria-label="Search" />
+            <button className="btn btn-primary !px-4 sm:!px-6">Search</button>
           </form>
           <p className="mt-5 text-sm text-stone-600">
             Try{" "}
@@ -50,7 +50,7 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-14">
-        <div className="mb-6 flex items-end justify-between"><h2 className="display text-3xl font-extrabold sm:text-4xl">Browse by category</h2><Link href="/search" className="text-sm font-semibold underline underline-offset-4">All businesses</Link></div>
+        <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6"><h2 className="display text-2xl font-extrabold sm:text-4xl">Browse by category</h2><Link href="/search" className="shrink-0 whitespace-nowrap text-sm font-semibold underline underline-offset-4">See all</Link></div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {cats.map((c) => (
             <Link key={c.slug} href={`/search?cat=${c.slug}`} className="card group overflow-hidden transition hover:-translate-y-0.5 hover:border-black/40">

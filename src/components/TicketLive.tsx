@@ -63,12 +63,12 @@ export default function TicketLive({ token }: { token: string }) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        <a className="btn btn-ghost flex-1" href={`tel:${t.business.phone.replace(/\s/g, "")}`}>📞 Call</a>
-        <button className="btn btn-ghost flex-1" onClick={() => { navigator.clipboard?.writeText(location.href); setMsg("Ticket link copied"); setTimeout(() => setMsg(""), 1800); }}>🔗 Copy my link</button>
+      <div className="mt-4 grid grid-cols-3 gap-2">
+        <a className="btn btn-ghost !px-2 text-sm whitespace-nowrap" href={`tel:${t.business.phone.replace(/\s/g, "")}`}>Call</a>
+        <button className="btn btn-ghost !px-2 text-sm whitespace-nowrap" onClick={() => { navigator.clipboard?.writeText(location.href); setMsg("Ticket link copied"); setTimeout(() => setMsg(""), 1800); }}>Copy link</button>
         {active && (
           <button
-            className="btn btn-danger flex-1" disabled={busy}
+            className="btn btn-danger !px-2 text-sm whitespace-nowrap" disabled={busy}
             onClick={async () => {
               if (!confirm("Leave the queue? You'll lose your place.")) return;
               setBusy(true);
