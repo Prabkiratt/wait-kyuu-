@@ -1,6 +1,42 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+/**
+ * Base URL of the API host for live streams. Empty = same origin (everything proxied through Next rewrites).
+ * In production set NEXT_PUBLIC_API_URL to the Render URL so streams bypass the proxy (long-lived connections).
+ */
+export const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "");
+export const streamUrl = (path: string) => `${API_BASE}${path}`;
+
+/**
+ * URL of the authenticated merchant stream. EventSource can't send cookies cross-site, so the page first
+ * trades its session cookie (via the same-origin proxy) for a short-lived token, and refreshes it before expiry.
+ */
+export function useMerchantStreamUrl() {
+  const [url, setUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    let alive = true;
+    let timer: ReturnType<typeof setTimeout>;
+    const fetchToken = async () => {
+      try {
+        const r = await post<{ token: string }>("/api/merchant/stream-token", {});
+        if (!alive) return;
+        setError(null);
+        setUrl(streamUrl(`/api/merchant/stream?t=${encodeURIComponent(r.token)}`));
+        timer = setTimeout(fetchToken, 10 * 60_000); // token lives 15 min
+      } catch (e) {
+        if (!alive) return;
+        setError((e as Error).message);
+        timer = setTimeout(fetchToken, 15_000);
+      }
+    };
+    fetchToken();
+    return () => { alive = false; clearTimeout(timer); };
+  }, []);
+  return { url, error };
+}
+
 /** Subscribe to a Server-Sent Events endpoint. EventSource reconnects automatically. */
 export function useLive<T>(url: string | null) {
   const [data, setData] = useState<T | null>(null);

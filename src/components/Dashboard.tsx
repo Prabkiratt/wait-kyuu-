@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { post, useLive } from "@/lib/client";
+import { useEffect, useMemo, useState } from "react";
+import { post, useLive, useMerchantStreamUrl } from "@/lib/client";
 import { ErrorState, LiveTag, Skeleton } from "./ui";
 
 interface Ticket { id: string; number: string; name: string; phone: string | null; status: string; source: string; joinedAt: number }
@@ -19,7 +19,14 @@ interface View {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { data, error, connected } = useLive<View>("/api/merchant/stream");
+  const token = useMerchantStreamUrl();
+  const live = useLive<View>(token.url);
+  const { data, connected } = live;
+  const liveError = live.error;
+  const error = useMemo(
+    () => liveError ?? (token.error ? { message: token.error, status: token.error === "Please sign in" ? 401 : undefined } : null),
+    [liveError, token.error],
+  );
   const [tab, setTab] = useState<"queue" | "qr" | "analytics" | "settings">("queue");
   const [qid, setQid] = useState<string>("");
   const [toast, setToast] = useState("");

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { db } from "@/lib/store";
-import { ACTIVE } from "@/lib/types";
+import { getBootstrap } from "@/lib/api-server";
 import MarketBrowser from "@/components/MarketBrowser";
 import ShortestWaits from "@/components/ShortestWaits";
 import { photo } from "@/lib/photo";
@@ -13,13 +12,11 @@ const STEPS = [
   { n: "03", t: "Walk in when it's your turn", d: "Watch the line shrink on your phone. We nudge you at 'you're next', so the waiting happens somewhere nicer." },
 ];
 
-export default function Home() {
-  const cats = db.categories.filter((c) => c.imageUrl).slice(0, 8);
-  const cover = (slug: string) => db.categories.find((c) => c.slug === slug)?.imageUrl;
-  const live = db.queues.filter((q) => q.status === "open" && db.businesses.some((b) => b.id === q.businessId && b.approval === "approved" && b.liveQueue)).length;
-  const waiting = db.tickets.filter((t) => ACTIVE.includes(t.status)).length;
-  const served = db.tickets.filter((t) => t.status === "COMPLETED").length;
-  const bizCount = db.businesses.filter((b) => b.approval === "approved").length;
+export default async function Home() {
+  const { categories, stats } = await getBootstrap();
+  const cats = categories.filter((c) => c.imageUrl).slice(0, 8);
+  const cover = (slug: string) => categories.find((c) => c.slug === slug)?.imageUrl;
+  const { liveQueues: live, waiting, served, businesses: bizCount } = stats;
 
   return (
     <>

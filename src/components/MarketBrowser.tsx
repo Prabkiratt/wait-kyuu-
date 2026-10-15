@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import type { BusinessCard } from "@/lib/types";
-import { useDebounced, useFavorites, useLive, useLocation } from "@/lib/client";
+import { streamUrl, useDebounced, useFavorites, useLive, useLocation } from "@/lib/client";
 import BusinessCardView from "./BusinessCardView";
 import { EmptyState, ErrorState, LiveTag, Skeleton } from "./ui";
 
@@ -39,7 +39,7 @@ export default function MarketBrowser({ initialQ = "", initialCat = "", search =
     p.set("sort", sort);
     p.set("lat", String(loc.lat));
     p.set("lng", String(loc.lng));
-    return `/api/market/stream?${p}`;
+    return streamUrl(`/api/market/stream?${p}`);
   }, [dq, cat, open, live, maxWait, minRating, sort, loc]);
 
   const { data, error, connected } = useLive<Feed>(url);

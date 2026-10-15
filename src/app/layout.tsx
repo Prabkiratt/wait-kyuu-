@@ -4,7 +4,7 @@ import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Logo from "@/components/Logo";
-import { db } from "@/lib/store";
+import { getBootstrap } from "@/lib/api-server";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const display = Bricolage_Grotesque({ variable: "--font-display", subsets: ["latin"], weight: ["600", "700", "800"] });
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffc21a" };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
-  const { platformName, announcement, supportEmail } = db.settings;
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const { platformName, announcement, supportEmail } = await getBootstrap();
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${display.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">

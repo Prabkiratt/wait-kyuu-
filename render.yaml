@@ -1,0 +1,34 @@
+# Render Blueprint for the Wait? Kyu? API (the Node server in /server).
+# Frontend -> Vercel (Next.js).  Database -> Supabase (Postgres).  See docs/DEPLOYMENT.md.
+services:
+  - type: web
+    name: wait-kyu-api
+    runtime: node
+    region: singapore            # closest Render region to India; change to taste
+    plan: starter                # "free" works for a demo but sleeps after 15 min idle (30-60s cold starts)
+    numInstances: 1              # IMPORTANT: the server keeps a live in-memory copy of the data. Do not scale out.
+    buildCommand: npm ci --omit=dev
+    startCommand: npm run start:api
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL         # Supabase -> Project Settings -> Database -> Connection string (Session pooler)
+        sync: false
+      - key: FRONTEND_URL         # your Vercel URL, e.g. https://wait-kyu.vercel.app (comma-separate extra origins)
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: ADMIN_EMAILS
+        sync: false
+      # - key: SEED_DEMO          # set to "1" to start with the demo businesses (accounts share a known password!)
+      #   value: "1"

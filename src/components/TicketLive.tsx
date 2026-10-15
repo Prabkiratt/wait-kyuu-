@@ -2,11 +2,11 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { TicketView } from "@/lib/types";
-import { forgetTicket, post, useLive } from "@/lib/client";
+import { forgetTicket, post, streamUrl, useLive } from "@/lib/client";
 import { ErrorState, LiveTag, Skeleton } from "./ui";
 
 export default function TicketLive({ token }: { token: string }) {
-  const { data: t, error, connected } = useLive<TicketView>(`/api/ticket/${encodeURIComponent(token)}/stream`);
+  const { data: t, error, connected } = useLive<TicketView>(streamUrl(`/api/ticket/${encodeURIComponent(token)}/stream`));
   const [busy, setBusy] = useState(false);
   const [rating, setRating] = useState(0);
   const [text, setText] = useState("");

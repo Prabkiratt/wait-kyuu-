@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { BusinessCard, QueueView } from "@/lib/types";
-import { getTicket, post, saveTicket, useFavorites, useLive } from "@/lib/client";
+import { getTicket, post, saveTicket, streamUrl, useFavorites, useLive } from "@/lib/client";
 import { Cover, EmptyState, ErrorState, LiveTag, Skeleton, Stars, WaitBadge, photo } from "./ui";
 
 interface Detail {
@@ -15,7 +15,7 @@ interface Detail {
 }
 
 export default function BusinessView({ slug, autoJoin }: { slug: string; autoJoin: boolean }) {
-  const { data, error, connected } = useLive<Detail>(`/api/business/${encodeURIComponent(slug)}/stream`);
+  const { data, error, connected } = useLive<Detail>(streamUrl(`/api/business/${encodeURIComponent(slug)}/stream`));
   const router = useRouter();
   const { favs, toggle } = useFavorites();
   const [joining, setJoining] = useState<string | null>(null); // queue id being joined
@@ -23,6 +23,7 @@ export default function BusinessView({ slug, autoJoin }: { slug: string; autoJoi
   const [copied, setCopied] = useState(false);
 
   useEffect(() => setExisting(getTicket(slug)), [slug]);
+  useEffect(() => { if (data) document.title = `${data.card.name} · live queue`; }, [data?.card.name]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (autoJoin && data && joining === null) {
       const open = data.queues.filter((q) => q.status === "open");

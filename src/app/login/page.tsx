@@ -1,17 +1,19 @@
 import AuthForm from "@/components/AuthForm";
-import { googleConfigured, safeNext } from "@/lib/google";
+import { getBootstrap } from "@/lib/api-server";
 
 export const metadata = { title: "Sign in" };
-export const dynamic = "force-dynamic";
+
+/** Only same-site relative paths are allowed as post-login destinations (prevents open redirects). */
+const safeNext = (n?: string) => (n && n.startsWith("/") && !n.startsWith("//") && !n.includes("\\") ? n : undefined);
 
 export default async function Login({ searchParams }: PageProps<"/login">) {
   const sp = await searchParams;
   const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-  const demo = process.env.NODE_ENV !== "production" || process.env.DEMO_MODE === "1";
+  const boot = await getBootstrap();
   return (
     <AuthForm
-      role="customer" googleEnabled={googleConfigured()} next={safeNext(one(sp.next)) ?? undefined} error={one(sp.error)}
-      demos={demo ? [{ slug: "customer", name: "Demo customer" }] : []}
+      role="customer" googleEnabled={boot.googleEnabled} next={safeNext(one(sp.next))} error={one(sp.error)}
+      demos={boot.demo ? [{ slug: "customer", name: "Demo customer" }] : []}
     />
   );
 }

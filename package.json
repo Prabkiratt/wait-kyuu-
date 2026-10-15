@@ -4,28 +4,45 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:api": "tsx watch server/src/index.ts",
+    "dev:all": "concurrently -n web,api -c yellow,cyan \"npm:dev\" \"npm:dev:api\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "start:api": "tsx server/src/index.ts",
+    "lint": "eslint src server/src",
+    "typecheck": "tsc --noEmit && tsc -p server/tsconfig.json",
+    "test:api": "tsx --test server/test/persist.test.ts"
   },
   "dependencies": {
+    "@hono/node-server": "^2.1.5",
+    "dotenv": "^18.0.8",
+    "hono": "^4.13.13",
     "leaflet": "^1.9.4",
     "next": "16.3.8",
+    "pg": "^8.23.1",
     "qrcode": "^1.5.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "tsx": "^4.23.15"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
     "@tailwindcss/postcss": "^4",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^10.0.6",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "description": "Real-time queue and waiting-time marketplace"
+  "description": "Real-time queue and waiting-time marketplace",
+  "engines": {
+    "node": ">=20"
+  }
 }

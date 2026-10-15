@@ -43,3 +43,5 @@ next-env.d.ts
 
 # keep the committed template
 !.env.example
+server/.env
+!server/.env.example

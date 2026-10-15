@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
 import type { BusinessCard } from "@/lib/types";
-import { useLive } from "@/lib/client";
+import { streamUrl, useLive } from "@/lib/client";
 import { Cover, LiveTag, Skeleton } from "./ui";
 
 const COLOR = { green: "#14591d", amber: "#9a6500", red: "#b3300f", gray: "#55503f" } as const;
 
 /** Real, live data: the five open queues with the shortest wait right now. */
 export default function ShortestWaits() {
-  const { data, connected } = useLive<{ results: BusinessCard[] }>("/api/market/stream?sort=wait&live=1&open=1");
+  const { data, connected } = useLive<{ results: BusinessCard[] }>(streamUrl("/api/market/stream?sort=wait&live=1&open=1"));
   const rows = (data?.results ?? []).filter((b) => b.waitMin !== null && b.status === "OPEN").slice(0, 5);
   return (
     <div className="relative">
